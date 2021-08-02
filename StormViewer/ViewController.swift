@@ -12,6 +12,8 @@ class ViewController: UIViewController {
     var pic = [String]()
     var tableView: UITableView!
     override func viewDidLoad() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        title = "Storm Viewer"
         super.viewDidLoad()
         let fileManager = FileManager.default
         let path = Bundle.main.resourcePath!
@@ -19,6 +21,7 @@ class ViewController: UIViewController {
         for x in items {
             if x.hasPrefix("nssl") {
                 pic.append(x)
+                pic.sort()
             }
         }
         print(pic.count)
@@ -32,7 +35,6 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ids")
-        tableView.backgroundColor = .darkGray
         tableView.separatorStyle = .none
         tableView.rowHeight = 80
     }
@@ -52,6 +54,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ids", for: indexPath)
+        cell.accessoryType = .disclosureIndicator
         cell.textLabel?.text = pic[indexPath.row]
         return cell
     }
@@ -60,6 +63,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         if let vc = storyboard?.instantiateViewController(identifier: "detail") as? DetailViewController {
             vc.selected = pic[indexPath.row]
+            vc.title = "Pictures \(indexPath.row + 1) of \(pic.count)"
             navigationController?.pushViewController(vc, animated: true)
         }
     }
