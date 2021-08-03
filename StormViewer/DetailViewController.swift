@@ -19,6 +19,7 @@ class DetailViewController: UIViewController {
         if let loaded = selected {
             imageView.image = UIImage(named: loaded)
         }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(didPressShare))
         // Do any additional setup after loading the view.
     }
     
@@ -30,5 +31,14 @@ class DetailViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.hidesBarsOnTap = false
+    }
+    
+    @objc func didPressShare() {
+        guard let image = imageView.image?.jpegData(compressionQuality: 0.2) else {
+            return
+        }
+        let vc = UIActivityViewController(activityItems: [image, selected!], applicationActivities: [])
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(vc, animated: true, completion: nil)
     }
 }

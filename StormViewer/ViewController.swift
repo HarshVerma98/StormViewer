@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Storm Viewer"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(didpressRec))
         super.viewDidLoad()
         let fileManager = FileManager.default
         let path = Bundle.main.resourcePath!
@@ -43,6 +44,13 @@ class ViewController: UIViewController {
         super.viewDidLayoutSubviews()
         view.addSubview(tableView)
         tableView.frame = view.bounds
+    }
+    
+    @objc func didpressRec() {
+        let link = "https://www.google.com"
+        let vc = UIActivityViewController(activityItems: [link], applicationActivities: [])
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(vc, animated: true, completion: nil)
     }
 
 }
